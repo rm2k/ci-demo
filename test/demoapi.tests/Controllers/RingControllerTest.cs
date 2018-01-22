@@ -28,8 +28,8 @@ namespace demoapi.Controllers
             // Assert
             var actual = Assert.IsType<OkObjectResult>(result);
             var ring = Assert.IsType<Ring>(actual.Value);
-            Assert.Equal(2, ring.Number);
-            Assert.Equal(1, ring.HallNumber);
+            Assert.Equal(1, ring.Number);
+            Assert.Equal(2, ring.HallNumber);
         }
     }
 }
