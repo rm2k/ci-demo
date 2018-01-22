@@ -5,7 +5,7 @@ pipeline {
         stage('BuildAndTest') {
             steps {
                 checkout scm
-                powershell './build.ps1'
+                powershell ./build.ps1
             }
         }
     }
