@@ -28,7 +28,9 @@ namespace demoapi.Controllers
 
         public IActionResult GetAll()
         {
-            throw new NotImplementedException();
+            var rings = _provider.GetAllAvailableRings();
+
+            return Ok(rings);
         }
     }
 }
