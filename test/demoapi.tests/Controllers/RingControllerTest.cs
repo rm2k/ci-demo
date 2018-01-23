@@ -31,5 +31,26 @@ namespace demoapi.Controllers
             Assert.Equal(1, ring.Number);
             Assert.Equal(2, ring.HallNumber);
         }
+
+        [Fact]
+        public void GetNext_Returns_NotFound_When_There_Is_No_Available_Ring()
+        {
+            // Arrange
+            var slotProviderMock = new Mock<IRingProvider>();
+
+            slotProviderMock.Setup(x => x.GetNextAvailableRing()).Returns(new Ring
+            {
+                Number = 1,
+                HallNumber = 2
+            });
+
+            var controller = new RingController(slotProviderMock.Object);
+
+            // Act
+            var result = controller.GetNext();
+
+            // Assert
+            var actual = Assert.IsType<NotFoundResult>(result);
+        }
     }
 }
