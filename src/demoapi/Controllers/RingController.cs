@@ -17,6 +17,11 @@ namespace demoapi.Controllers
         {
             var ring = _provider.GetNextAvailableRing();
 
+            if(ring == null)
+            {
+                return NotFound();
+            }
+
             return Ok(ring);
         }
     }

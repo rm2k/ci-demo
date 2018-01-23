@@ -38,11 +38,7 @@ namespace demoapi.Controllers
             // Arrange
             var slotProviderMock = new Mock<IRingProvider>();
 
-            slotProviderMock.Setup(x => x.GetNextAvailableRing()).Returns(new Ring
-            {
-                Number = 1,
-                HallNumber = 2
-            });
+            slotProviderMock.Setup(x => x.GetNextAvailableRing()).Returns(() => null);
 
             var controller = new RingController(slotProviderMock.Object);
 
