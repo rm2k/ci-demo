@@ -52,7 +52,7 @@ Task("Test")
             Configuration = configuration,
             NoRestore = true,
             NoBuild = true
-        }
+        };
 
         foreach(var file in projectFiles)
         {
