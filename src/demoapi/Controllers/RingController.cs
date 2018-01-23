@@ -1,4 +1,5 @@
-﻿using demoapi.Services;
+﻿using System;
+using demoapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demoapi.Controllers
@@ -23,6 +24,11 @@ namespace demoapi.Controllers
             }
 
             return Ok(ring);
+        }
+
+        public IActionResult GetAll()
+        {
+            throw new NotImplementedException();
         }
     }
 }
