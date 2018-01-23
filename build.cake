@@ -18,17 +18,17 @@ Task("Clean")
             Configuration = configuration
         };
 
-         DotNetCoreClean(".", settings);
+        DotNetCoreClean(".", settings);
     });
 
 Task("Restore")
+    .IsDependentOn("Clean")
     .Does(() => 
     {
         DotNetCoreRestore();
     });
 
 Task("Build")
-    .IsDependentOn("Clean")
     .IsDependentOn("Restore")
     .Does(() =>
     {
@@ -52,7 +52,7 @@ Task("Test")
             Configuration = configuration,
             NoRestore = true,
             NoBuild = true
-        };
+        }
 
         foreach(var file in projectFiles)
         {
