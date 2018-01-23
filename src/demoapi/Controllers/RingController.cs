@@ -1,4 +1,5 @@
-﻿using demoapi.Services;
+﻿using System;
+using demoapi.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace demoapi.Controllers
@@ -17,7 +18,19 @@ namespace demoapi.Controllers
         {
             var ring = _provider.GetNextAvailableRing();
 
+            if(ring == null)
+            {
+                return NotFound();
+            }
+
             return Ok(ring);
+        }
+
+        public IActionResult GetAll()
+        {
+            var rings = _provider.GetAllAvailableRings();
+
+            return Ok(rings);
         }
     }
 }
