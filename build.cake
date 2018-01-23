@@ -1,32 +1,70 @@
-var settings = new DotNetCoreCleanSettings
-{
-	Framework = "netcoreapp1.1",
-    Configuration = "Debug",
-    OutputDirectory = "./artifacts/"
-};
+////////////////////////////////////////////////////////////////
+// ARGUMENTS
+////////////////////////////////////////////////////////////////
 
-var target = Argument("target", "Default");
-var configuration = Argument("configuration","Debug");
+var target = Argument<string>("target", "Default");
+var configuration = Argument<string>("configuration", "Release"); 
 
-var testProjects  = GetFiles("./test/**/*.csproj");
+///////////////////////////////////////////////////////////////
+// TASKS
+///////////////////////////////////////////////////////////////
 
-var buildDir = Directory("./src/demoapi/bin") + Directory(configuration);
 
 Task("Clean")
-	.Does(() => 
-	{
-		DotNetCoreClean("./ci-demo.sln", settings);
+    .Does(() => 
+    {
+        var settings = new DotNetCoreCleanSettings
+        {
+            Configuration = configuration
+        };
+
+         DotNetCoreClean(".", settings);
+    });
+
+Task("Restore")
+    .Does(() => 
+    {
+        DotNetCoreRestore();
+    });
+
+Task("Build")
+    .IsDependentOn("Clean")
+    .IsDependentOn("Restore")
+    .Does(() =>
+    {
+        var settings = new DotNetCoreBuildSettings
+        {
+            Configuration = configuration,
+            NoRestore = true
+        };
+
+        DotNetCoreBuild(".", settings);
     });
 
 Task("Test")
-	.IsDependentOn("Clean")
-	.Does(() =>
-	{
-		DotNetCoreTest("./test/demoapi.tests/");
-	
-	});
+    .IsDependentOn("Build")
+    .Does(() =>
+    {
+        var projectFiles = GetFiles("./test/**/*.csproj");
+
+        var settings = new DotNetCoreTestSettings
+        {
+            Configuration = configuration,
+            NoRestore = true,
+            NoBuild = true
+        }
+
+        foreach(var file in projectFiles)
+        {
+            DotNetCoreTest(file.FullPath, settings);
+        }
+    });
 
 Task("Default")
     .IsDependentOn("Test");
+
+////////////////////////////////////////////////////////////////////
+// EXECUTION
+///////////////////////////////////////////////////////////////////
 
 RunTarget(target);
