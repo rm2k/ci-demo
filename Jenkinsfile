@@ -2,9 +2,11 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout'){
+          checkout scm
+        }
         stage('BuildAndTest') {
             steps {
-                checkout scm
                 bat 'powershell.exe -file ./build.ps1'
             }
         }
