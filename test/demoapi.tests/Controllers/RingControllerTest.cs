@@ -1,5 +1,6 @@
 ﻿using demoapi.Models;
 using demoapi.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System.Collections.Generic;
@@ -92,6 +93,28 @@ namespace demoapi.Controllers
 
             // Assert
             var actual = Assert.IsType<OkResult>(result);
+        }
+
+        [Fact]
+        public void IsAvailable_Returns_Locked_IfRingIsNotAvailable()
+        {
+            // Arrange
+            var hallNumber = 1;
+            var ringNumber = 2;
+            var slotProviderMock = new Mock<IRingProvider>();
+
+            var expectStatusCode = StatusCodes.Status423Locked;
+
+            slotProviderMock.Setup(x => x.IsRingAvailable(It.IsAny<int>(), It.IsAny<int>())).Returns(() => false);
+
+            var controller = new RingController(slotProviderMock.Object);
+
+            // Act
+            var result = controller.IsAvailable(hallNumber, ringNumber);
+
+            // Assert
+            var actual = Assert.IsType<ObjectResult>(result);
+            Assert.Equal((int)expectStatusCode, actual.StatusCode);
         }
     }
 }
