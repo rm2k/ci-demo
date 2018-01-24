@@ -83,15 +83,15 @@ namespace demoapi.Controllers
             var ringNumber = 2;
             var slotProviderMock = new Mock<IRingProvider>();
 
-            slotProviderMock.Setup(x => x.IsRingAvailable(hallNumber,ringNumber)).Returns(() => true);
+            slotProviderMock.Setup(x => x.IsRingAvailable(It.IsAny<int>(), It.IsAny<int>())).Returns(() => true);
 
             var controller = new RingController(slotProviderMock.Object);
 
             // Act
-            var result = controller.IsAvailable(hallNumber,ringNumber);
+            var result = controller.IsAvailable(hallNumber, ringNumber);
 
             // Assert
-            var actual = Assert.IsType<OkObjectResult>(result);
+            var actual = Assert.IsType<OkResult>(result);
         }
     }
 }

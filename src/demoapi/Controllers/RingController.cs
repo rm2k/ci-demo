@@ -33,9 +33,9 @@ namespace demoapi.Controllers
             return Ok(rings);
         }
 
-        public bool IsAvailable(int hallNumber, int ringNumber)
+        public IActionResult IsAvailable(int hallNumber, int ringNumber)
         {
-            throw new NotImplementedException();
+            return Ok();
         }
     }
 }
