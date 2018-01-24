@@ -74,5 +74,24 @@ namespace demoapi.Controllers
             var actual = Assert.IsType<OkObjectResult>(result);
             var rings = Assert.IsAssignableFrom<IEnumerable<Ring>>(actual.Value);
         }
+
+        [Fact]
+        public void IsAvailable_Returns_Ok_IfRingIsAvailable()
+        {
+            // Arrange
+            var hallNumber = 1;
+            var ringNumber = 2;
+            var slotProviderMock = new Mock<IRingProvider>();
+
+            slotProviderMock.Setup(x => x.IsRingAvailable(hallNumber,ringNumber)).Returns(() => true);
+
+            var controller = new RingController(slotProviderMock.Object);
+
+            // Act
+            var result = controller.IsAvailable(hallNumber,ringNumber);
+
+            // Assert
+            var actual = Assert.IsType<OkObjectResult>(result);
+        }
     }
 }
