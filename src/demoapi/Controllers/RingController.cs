@@ -32,5 +32,20 @@ namespace demoapi.Controllers
 
             return Ok(rings);
         }
+
+        public IActionResult IsAvailable(int hallNumber, int ringNumber)
+        {
+            var result = _provider.IsRingAvailable(hallNumber,ringNumber);
+
+            if(result)
+            {
+                return Ok();                
+            }
+            
+            return StatusCode(423, new 
+            {
+                Error = "The ring is currently in use"
+            });
+        }
     }
 }
