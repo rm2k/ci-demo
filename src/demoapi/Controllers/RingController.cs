@@ -32,5 +32,10 @@ namespace demoapi.Controllers
 
             return Ok(rings);
         }
+
+        public IActionResult IsAvailable(int hallNumber, int ringNumber)
+        {
+            return Ok();
+        }
     }
 }

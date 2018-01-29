@@ -7,5 +7,6 @@ namespace demoapi.Services
     {
         Ring GetNextAvailableRing();
         IEnumerable<Ring> GetAllAvailableRings();
+        bool IsRingAvailable(int hallNumber, int ringNumber);
     }
 }
