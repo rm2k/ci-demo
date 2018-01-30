@@ -37,19 +37,12 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var projectFiles = GetFiles("./test/**/*.csproj");
+            var projects = GetFiles("./test/**/*.tests.csproj");
 
-        var settings = new DotNetCoreTestSettings
-        {
-            Configuration = configuration,
-            NoBuild = true,
-            Logger = "trx;LogFileName=test-reports.xml"
-        };
-
-        foreach(var file in projectFiles)
-        {
-            DotNetCoreTest(file.FullPath, settings);
-        }
+            foreach(var project in projects)
+            {
+                DotNetCoreTool(project, "xunit", "-xml ./reports/test-reports.xml");
+            }
     });
 
 Task("Default")
