@@ -21,21 +21,13 @@ Task("Clean")
         DotNetCoreClean(".", settings);
     });
 
-Task("Restore")
-    .IsDependentOn("Clean")
-    .Does(() => 
-    {
-        DotNetCoreRestore();
-    });
-
 Task("Build")
-    .IsDependentOn("Restore")
+    .IsDependentOn("Clean")
     .Does(() =>
     {
         var settings = new DotNetCoreBuildSettings
         {
-            Configuration = configuration,
-            NoRestore = true
+            Configuration = configuration
         };
 
         DotNetCoreBuild(".", settings);
@@ -50,8 +42,8 @@ Task("Test")
         var settings = new DotNetCoreTestSettings
         {
             Configuration = configuration,
-            NoRestore = true,
-            NoBuild = true
+            NoBuild = true,
+            Logger = "trx;LogFileName=test-reports.xml"
         };
 
         foreach(var file in projectFiles)
