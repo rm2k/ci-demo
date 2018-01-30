@@ -116,5 +116,27 @@ namespace demoapi.Controllers
             var actual = Assert.IsType<ObjectResult>(result);
             Assert.Equal((int)expectStatusCode, actual.StatusCode);
         }
+
+                [Fact]
+        public void IsAvailable_Returns_OkResult_IfRingIsAvailable()
+        {
+            // Arrange
+            var hallNumber = 1;
+            var ringNumber = 2;
+            var slotProviderMock = new Mock<IRingProvider>();
+
+            var expectStatusCode = StatusCodes.Status423Locked;
+
+            slotProviderMock.Setup(x => x.IsRingAvailable(It.IsAny<int>(), It.IsAny<int>())).Returns(() => true);
+
+            var controller = new RingController(slotProviderMock.Object);
+
+            // Act
+            var result = controller.IsAvailable(hallNumber, ringNumber);
+
+            // Assert
+            var actual = Assert.IsType<ObjectResult>(result);
+            Assert.Equal((int)expectStatusCode, actual.StatusCode);
+        }
     }
 }
