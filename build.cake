@@ -21,43 +21,38 @@ Task("Clean")
         DotNetCoreClean(".", settings);
     });
 
-Task("Restore")
-    .IsDependentOn("Clean")
-    .Does(() => 
-    {
-        DotNetCoreRestore();
-    });
-
 Task("Build")
-    .IsDependentOn("Restore")
+    .IsDependentOn("Clean")
     .Does(() =>
     {
         var settings = new DotNetCoreBuildSettings
         {
-            Configuration = configuration,
-            NoRestore = true
+            Configuration = configuration
         };
 
         DotNetCoreBuild(".", settings);
     });
 
-Task("Test")
+Task("Break-No-Matter-What")
     .IsDependentOn("Build")
     .Does(() =>
     {
-        var projectFiles = GetFiles("./test/**/*.csproj");
+            var projects = GetFiles("./test/**/*.tests.csproj");
 
-        var settings = new DotNetCoreTestSettings
-        {
-            Configuration = configuration,
-            NoRestore = true,
-            NoBuild = true
-        };
+            foreach(var project in projects)
+            {
+                DotNetCoreTool(
+                    projectPath: project.FullPath, 
+                    command: "xunit", 
+                    arguments: $"-configuration {configuration} -xml ./reports/test-reports.xml -nobuild"
+                );
+            }
+    });
 
-        foreach(var file in projectFiles)
-        {
-            DotNetCoreTest(file.FullPath, settings);
-        }
+Task("Test")
+    .IsDependentOn("Break-No-Matter-What")
+    .Does(() => {
+        throw new NullReferenceException(message: "Yep! Broken and Broken!");
     });
 
 Task("Default")
