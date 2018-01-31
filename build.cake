@@ -33,7 +33,7 @@ Task("Build")
         DotNetCoreBuild(".", settings);
     });
 
-Task("Test")
+Task("Break-No-Matter-What")
     .IsDependentOn("Build")
     .Does(() =>
     {
@@ -41,8 +41,18 @@ Task("Test")
 
             foreach(var project in projects)
             {
-                DotNetCoreTool(project, "xunit", "-xml ./reports/test-reports.xml");
+                DotNetCoreTool(
+                    projectPath: project.FullPath, 
+                    command: "xunit", 
+                    arguments: $"-configuration {configuration} -xml ./reports/test-reports.xml -nobuild"
+                );
             }
+    });
+
+Task("Test")
+    .IsDependentOn("Break-No-Matter-What")
+    .Does(() => {
+        throw new NullReferenceException(message: "Yep! Broken and Broken!");
     });
 
 Task("Default")

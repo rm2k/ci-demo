@@ -125,7 +125,7 @@ namespace demoapi.Controllers
             var ringNumber = 2;
             var slotProviderMock = new Mock<IRingProvider>();
 
-            var expectStatusCode = StatusCodes.Status423Locked;
+            var expectStatusCode = StatusCodes.Status200OK;
 
             slotProviderMock.Setup(x => x.IsRingAvailable(It.IsAny<int>(), It.IsAny<int>())).Returns(() => true);
 
@@ -135,7 +135,7 @@ namespace demoapi.Controllers
             var result = controller.IsAvailable(hallNumber, ringNumber);
 
             // Assert
-            var actual = Assert.IsType<ObjectResult>(result);
+            var actual = Assert.IsType<OkResult>(result);
             Assert.Equal((int)expectStatusCode, actual.StatusCode);
         }
     }
